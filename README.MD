@@ -20,7 +20,7 @@ nginx was not needed, since only ssh port forwarding was used to access kibana!
 
 ### jvm configurations
 
-jvm specs had to be reduced to work on a "weak" machine, see configs, e.g. in the [jvm.options](logstash/jvm.options) file and the 
+jvm specs had to be reduced to work on a "weak" machine, see configs, e.g. in the [jvm.options](etc/logstash/jvm.options) file and the 
 [reduceram.options](etc/elasticsearch/jvm.options.d/reduceram.options) file,
 e.g. only using
 
@@ -33,7 +33,7 @@ e.g. only using
 
 to avoid accidentally serving any misconfigured ports, ufw was used to protect the machine running Cowrie and the ELK stack.
 
-allow for "real" ssh port and the "fake" ssh port and telnet port served by cowrie
+allow the "fake" ssh port and "fake" telnet port served by cowrie (don't forget to also add your real ssh port - do not lock yourself out of your server)
 ```
 apt update && apt upgrade -y && apt install -y ufw && \
 ufw allow 22/tcp  && \
@@ -43,7 +43,7 @@ ufw enable
 
 ### give correct rights to logstash
 
-for logstash to work correctly, the following commands were used:
+for logstash to work correctly, the following commands should be used:
 
 ```
 mkdir /usr/share/logstash/logs && \
@@ -78,7 +78,7 @@ when the rest of the original instructions were followed, you could see the log 
 
 ## Some interesting findings while using cowrie
 
-If one looks at the logs of what bots tried to run after a successfull login via ssh, one can see, that most try to install some crypto miners, e.g. for monero.
+If one looks at the logs of what bots tried to run after a successfull login via ssh, one can see, that most try to install some crypto miners (like shown in most of the honeypot research papers), e.g. for monero.
 
 Some examplary commands, resulting from running ```grep -r "cowrie.command.input" | cut -d ':' -f2- | jq .input | tr -d '"'``` on all the json-log files, which searches for all events where something/someone logged in entered a command into Cowrie:
 
@@ -135,7 +135,7 @@ data
 ELF 32-bit LSB executable, Intel 80386, version 1 (SYSV), statically linked, stripped
 ```
 Where "data" and "ASCII" text are scripts or shell commands.
-`
+
 
 Also, the following well known Raspi malware was seen in the Downloads:
 
